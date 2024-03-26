@@ -16,14 +16,20 @@ cd $HOME
 cd ..
 cd ..
 
+cd eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train || echo "Could not find $IMAGENET_PATH"
+
+current_path=$(pwd)
+echo "Current Path: $current_path"
+
+
 # find image paths given NUM_IMG_PATHS 
-jpg_files=$(find "$IMAGENET_PATH" -type f -name '*.jpg' | shuf -n "$NUM_IMG_PATHS")
+jpg_files=$(find .  -type f -name '*.JPEG' | shuf -n "$NUM_IMG_PATHS")
 
 # create an array to store the paths
 paths=()
 
 # name of json file for storage
-json_file = "imagenet_rand_$NUM_IMG_PATHS.json"
+json_file="imagenet_rand_$NUM_IMG_PATHS.json"
 
 # get image path and store to paths array
 for file in $jpg_files; do
@@ -34,17 +40,22 @@ for file in $jpg_files; do
 done
 
 # switch to where image paths will be stored
-cd $HOME/"$original_dir"/assets/polaris
+cd "$original_dir"/assets/polaris/img_paths
+
+# make dated directory
+date=$(date +'%Y-%m-%d')
+
+mkdir "$date" || echo "Directory $date already exits"
 
 # create a JSON file containing the paths
-echo "{ \"paths\": [" > "./$json_file"
+echo "{ \"paths\": [" > "$date/$json_file"
 for path in "${paths[@]}"; do
-    echo "  \"$path\"," >> "./$json_file"
+    echo "  \"$path\"," >> "$date/$json_file"
 done
 
 # remove the trailing comma from the last entry
-sed -i '$ s/,$//' "./$json_file"
-echo "] }" >> "./$json_file"
+sed -i '$ s/,$//' "$date/$json_file"
+echo "] }" >> "$date/$json_file"
 
 
 
