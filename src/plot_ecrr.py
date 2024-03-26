@@ -22,7 +22,7 @@ entropy = df["entropy"]
 compression_ratio = df["compression_ratio"]
 num_rows = df.shape[0]
 
-plt.figure(figsize=(8, 6))
+plt.figure(figsize=(12, 8))
 plt.scatter(entropy, compression_ratio, color="blue", alpha=0.5)
 plt.title("Entropy vs. Compression Ratio for {} Images in ImageNet".format(num_rows))
 plt.xlabel("entropy")
