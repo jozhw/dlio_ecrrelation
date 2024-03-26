@@ -55,7 +55,7 @@ for path in data["paths"]:
     image: np.array = np.array(Image.open(image_path))
 
     # get dimensions
-    dimensions: tuple[int] = image.shape[:2]
+    dimensions: tuple[int, int] = image.shape[:2]
 
     # calculate occurances
     # since we are using rgb, avoid grayscale
@@ -90,7 +90,11 @@ for path in data["paths"]:
     # add to iteration completed
     iter += 1
 
-    print("Completed iteration - {} for {}: entropy={}, compression_ratio={} \n".format(iter, fname, entropy, compression_ratio))
+    print(
+        "Completed iteration - {} for {}: entropy={}, compression_ratio={} \n".format(
+            iter, fname, entropy, compression_ratio
+        )
+    )
 
 # save to csv file
 csv_file = os.path.join(path_to_data_save, "results.csv")

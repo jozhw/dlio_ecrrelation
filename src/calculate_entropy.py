@@ -3,8 +3,6 @@ from typing import Dict
 
 import numpy as np
 
-from type_hints import Matrix
-
 
 def count_occurrences(image_data: np.array) -> Dict:
     occurrences: Dict = {}
@@ -18,7 +16,7 @@ def count_occurrences(image_data: np.array) -> Dict:
     return occurrences
 
 
-def calculate_entropy(occurrences: Dict, dimensions: Matrix) -> float:
+def calculate_entropy(occurrences: Dict, dimensions: tuple[int, int]) -> float:
     file_size: int = dimensions[0] * dimensions[1]
     entropy: float = 0
     for count in occurrences.values():
