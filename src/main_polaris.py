@@ -63,7 +63,7 @@ for path in data["paths"]:
     fname, _ = os.path.splitext(os.path.basename(path))
 
     # set up compressed image save
-    compressed_image_path: str = os.path.join(path_to_npz_save, fname, ".npz")
+    compressed_image_path: str = os.path.join(path_to_npz_save, f"{fname}.npz")
 
     # compress and save the image
     np.savez_compressed(compressed_image_path, image)
