@@ -84,8 +84,18 @@ for path in data["paths"]:
         compressed_image_path, dimensions
     )
 
+    # want also to store the uncompressed size and the compressed size
+    uncompressed_size: int = dimensions[0] * dimensions[1] * 3
+
+    compressed_size: int = os.path.getsize(compressed_image_path)
+
     # store to results dict
-    results[fname] = {"entropy": entropy, "compression_ratio": compression_ratio}
+    results[fname] = {
+        "entropy": entropy,
+        "compression_ratio": compression_ratio,
+        "uncompressed_size": uncompressed_size,
+        "compressed_size": compressed_size,
+    }
 
     # add to iteration completed
     iter += 1
@@ -102,7 +112,14 @@ csv_file = os.path.join(path_to_data_save, "results.csv")
 # write to csv_file
 with open(csv_file, "w", newline="") as file:
     writer = csv.DictWriter(
-        file, fieldnames=["file_name", "entropy", "compression_ratio"]
+        file,
+        fieldnames=[
+            "file_name",
+            "entropy",
+            "compression_ratio",
+            "uncompressed_size",
+            "compressed_size",
+        ],
     )
     writer.writeheader()
     for file_name, values in results.items():
@@ -111,6 +128,8 @@ with open(csv_file, "w", newline="") as file:
                 "file_name": file_name,
                 "entropy": values["entropy"],
                 "compression_ratio": values["compression_ratio"],
+                "uncompressed_size": values["uncompressed_size"],
+                "compressed_size": values["compressed_size"],
             }
         )
 
