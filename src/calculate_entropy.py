@@ -1,10 +1,10 @@
 import math
-from typing import Dict
+from typing import Dict, Tuple
 
 import numpy as np
 
 
-def count_occurrences(image_data: np.array) -> Dict:
+def count_occurrences(image_data: np.ndarray) -> Dict:
     occurrences: Dict = {}
     for row in image_data:
         for pixel in row:
@@ -16,7 +16,7 @@ def count_occurrences(image_data: np.array) -> Dict:
     return occurrences
 
 
-def calculate_entropy(occurrences: Dict, dimensions: tuple[int, int]) -> float:
+def calculate_entropy(occurrences: Dict, dimensions: Tuple) -> float:
     file_size: int = dimensions[0] * dimensions[1]
     entropy: float = 0
     for count in occurrences.values():

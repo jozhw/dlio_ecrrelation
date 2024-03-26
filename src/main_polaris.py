@@ -4,7 +4,7 @@ import csv
 import json
 import os
 import re
-from typing import Dict
+from typing import Dict, Tuple
 
 import numpy as np
 from PIL import Image
@@ -52,10 +52,10 @@ for path in data["paths"]:
     image_path: str = os.path.join(os.path.expanduser("~"), "..", "..", path)
 
     # load image into numpy array
-    image: np.array = np.array(Image.open(image_path))
+    image: np.ndarray = np.array(Image.open(image_path))
 
     # get dimensions
-    dimensions: tuple[int, int] = image.shape[:2]
+    dimensions: Tuple = image.shape[:2]
 
     # calculate occurances
     # since we are using rgb, avoid grayscale
