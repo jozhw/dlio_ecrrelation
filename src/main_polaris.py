@@ -42,6 +42,10 @@ results: Dict = {}
 with open(JSON_FILE) as f:
     data: Dict = json.load(f)
 
+# keep track of iterations
+
+iter: int = 0
+
 for path in data["paths"]:
 
     # set image path
@@ -50,11 +54,15 @@ for path in data["paths"]:
     # load image into numpy array
     image: np.array = np.array(Image.open(image_path))
 
-    # calculate occurances
-    occurances: Dict = count_occurrences(image)
-
     # get dimensions
     dimensions: tuple[int] = image.shape[:2]
+
+    # calculate occurances
+    # since we are using rgb, avoid grayscale
+    if len(image.shape) == 2 or image.shape[2] != 3:
+        continue
+
+    occurances: Dict = count_occurrences(image)
 
     # calculate the entropy
     entropy: float = calculate_entropy(occurances, dimensions)
@@ -79,6 +87,10 @@ for path in data["paths"]:
     # store to results dict
     results[fname] = {"entropy": entropy, "compression_ratio": compression_ratio}
 
+    # add to iteration completed
+    iter += 1
+
+    print("Completed iteration - {} for {}: entropy={}, compression_ratio={} \n".format(iter, fname, entropy, compression_ratio))
 
 # save to csv file
 csv_file = os.path.join(path_to_data_save, "results.csv")
@@ -89,10 +101,10 @@ with open(csv_file, "w", newline="") as file:
         file, fieldnames=["file_name", "entropy", "compression_ratio"]
     )
     writer.writeheader()
-    for filename, values in data.items():
+    for file_name, values in results.items():
         writer.writerow(
             {
-                "filename": filename,
+                "file_name": file_name,
                 "entropy": values["entropy"],
                 "compression_ratio": values["compression_ratio"],
             }
