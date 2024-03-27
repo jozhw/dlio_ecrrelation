@@ -3,7 +3,7 @@ import os
 
 def calculate_compression_ratio(compressed_filename: str, dimensions):
     # Get the size of the image file
-    compressed_file_size: float = os.path.getsize(compressed_filename)
+    compressed_file_size: int = os.path.getsize(compressed_filename)
 
     # Calculate the number of pixels in the image
     num_pixels: int = dimensions[0] * dimensions[1]

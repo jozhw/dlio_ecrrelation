@@ -17,7 +17,7 @@ def count_occurrences(image_data: np.ndarray) -> Dict:
 
 
 def calculate_entropy(occurrences: Dict, dimensions: Tuple) -> float:
-    file_size: int = dimensions[0] * dimensions[1]
+    file_size: int = dimensions[0] * dimensions[1] * 3  # assume RGB
     entropy: float = 0
     for count in occurrences.values():
         if count != 0:
