@@ -2,7 +2,7 @@ import re
 
 
 def validate_json_img_path(regex_date_pattern: str, json_img_path: str):
-    if not re.match(regex_date_pattern, json_img_path):
+    if not re.search(regex_date_pattern, json_img_path):
         raise ValueError(
             """
             Invalid input for json_img_path. The path does not contain date
