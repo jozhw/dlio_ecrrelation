@@ -1,5 +1,8 @@
 # with root dir as the working dir
+import os
+import sys
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.ecrr.ecr_relation import ECrRelation
 
 # path to json file
