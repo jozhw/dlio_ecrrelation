@@ -14,8 +14,8 @@ from PIL import Image
 
 from calculations.calculate_cr_by_file_type import calculate_cr_by_file_type
 from calculations.calculate_entropy import calculate_entropy, count_occurrences
+from src.plotting.generate_ecrr_plot import generate_npz_ecrr_plot
 from src.utils.generate_csv import generate_csv
-from src.utils.generate_ecrr_plot import generate_npz_ecrr_plot
 from src.utils.generate_save_paths import (
     generate_compressed_img_save_paths,
     generate_save_result_data_path,
