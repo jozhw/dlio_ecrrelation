@@ -21,6 +21,8 @@ def generate_npz_ecrr_plot(results_path: str, path_to_save_results_plot: str):
     plt.ylabel("compression_ratio")
     plt.grid(True)
 
-    plt.savefig("{}/entropy_compression_plot.png".format(path_to_save_results_plot))
+    plt.savefig(
+        "{}/npz_entropy_compression_ratio_plot.png".format(path_to_save_results_plot)
+    )
 
     plt.show()
