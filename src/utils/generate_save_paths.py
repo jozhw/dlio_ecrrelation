@@ -35,7 +35,7 @@ def generate_save_result_data_path(save_dir: str, date: str) -> str:
 
 
 def generate_save_result_plot_path(save_dir: str, date: str) -> str:
-    save_path: str = "./results/{}/plot/{}".format(save_dir, date)
+    save_path: str = "./results/{}/plots/{}".format(save_dir, date)
 
     os.makedirs(save_path, exist_ok=True)
     return save_path
