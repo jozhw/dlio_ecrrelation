@@ -12,9 +12,12 @@ from typing import Dict, List, Tuple
 import numpy as np
 from PIL import Image
 
-from calculations.calculate_cr_by_file_type import calculate_cr_by_file_type
-from calculations.calculate_entropy import calculate_entropy, count_occurrences
+from src.calculations.calculate_cr_by_file_type import calculate_cr_by_file_type
+from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
 from src.plotting.generate_ecrr_plot import generate_npz_ecrr_plot
+from src.plotting.generate_entropy_uncompressed_plot import (
+    generate_entropy_uncompressed_plot,
+)
 from src.utils.generate_csv import generate_csv
 from src.utils.generate_save_paths import (
     generate_compressed_img_save_paths,
@@ -159,6 +162,12 @@ class ECrRelation:
 
     def gen_npz_ecrr_plot(self):
         generate_npz_ecrr_plot(
+            os.path.join(self.path_to_save_results_data, "results.csv"),
+            self.path_to_save_results_plot,
+        )
+
+    def gen_entropy_uncompressed_plot(self):
+        generate_entropy_uncompressed_plot(
             os.path.join(self.path_to_save_results_data, "results.csv"),
             self.path_to_save_results_plot,
         )
