@@ -6,3 +6,6 @@
 
 # ignore .npz files
 **.npz
+
+# ignore emacs buffer save
+\#*\#
