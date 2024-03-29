@@ -16,7 +16,13 @@ from src.calculations.calculate_entropy import calculate_entropy, count_occurren
 from src.calculations.calculate_results_by_file_type import (
     calculate_results_by_file_type,
 )
-from src.plotting.generate_ecrr_plot import generate_npz_ecrr_plot
+from src.plotting.generate_ecrr_plot import (
+    generate_jpg_ecrr_plot,
+    generate_npz_ecrr_plot,
+)
+from src.plotting.generate_entropy_compressed_jpg_npz_plot import (
+    generate_entropy_compressed_jpg_npz_plot,
+)
 from src.plotting.generate_entropy_uncompressed_plot import (
     generate_entropy_uncompressed_plot,
 )
@@ -170,8 +176,20 @@ class ECrRelation:
             self.path_to_save_results_plot,
         )
 
+    def gen_jpg_ecrr_plot(self):
+        generate_jpg_ecrr_plot(
+            os.path.join(self.path_to_save_results_data, "results.csv"),
+            self.path_to_save_results_plot,
+        )
+
     def gen_entropy_uncompressed_plot(self):
         generate_entropy_uncompressed_plot(
+            os.path.join(self.path_to_save_results_data, "results.csv"),
+            self.path_to_save_results_plot,
+        )
+
+    def gen_entropy_compressed_jpg_npz_plot(self):
+        generate_entropy_compressed_jpg_npz_plot(
             os.path.join(self.path_to_save_results_data, "results.csv"),
             self.path_to_save_results_plot,
         )
