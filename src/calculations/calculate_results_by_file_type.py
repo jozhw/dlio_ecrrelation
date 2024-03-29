@@ -4,6 +4,7 @@ from typing import Dict, List, Tuple
 import numpy as np
 
 from src.calculations.calculate_compression_ratio import calculate_compression_ratio
+from src.compressions.compress_files_wrapper import compress_files_wrapper
 
 """
 return compression_ratio and file_size for each compressed_file_type
@@ -29,12 +30,7 @@ def calculate_results_by_file_type(
             f"{fname}.{file_type}",
         )
 
-        if file_type == "npz":
-            # lossless compression
-            np.savez_compressed(compressed_image_path, image)
-        else:
-            # put other compression algorithms here
-            pass
+        compress_files_wrapper(file_type, compressed_image_path, image)
 
         # calculate the compression ratio
         compression_ratio: float = calculate_compression_ratio(
