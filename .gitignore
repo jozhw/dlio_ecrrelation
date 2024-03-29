@@ -7,5 +7,10 @@
 # ignore .npz files
 **.npz
 
+# ignore jpeg files
+**.jpg
+**.JPEG
+**.jpeg
+
 # ignore emacs buffer save
 \#*\#
