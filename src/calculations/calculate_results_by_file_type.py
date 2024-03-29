@@ -10,7 +10,7 @@ return compression_ratio and file_size for each compressed_file_type
 """
 
 
-def calculate_cr_by_file_type(
+def calculate_results_by_file_type(
     fname: str,
     image: np.ndarray,
     dimensions: Tuple,

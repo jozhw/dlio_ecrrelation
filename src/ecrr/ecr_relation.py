@@ -12,8 +12,10 @@ from typing import Dict, List, Tuple
 import numpy as np
 from PIL import Image
 
-from src.calculations.calculate_cr_by_file_type import calculate_cr_by_file_type
 from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
+from src.calculations.calculate_results_by_file_type import (
+    calculate_results_by_file_type,
+)
 from src.plotting.generate_ecrr_plot import generate_npz_ecrr_plot
 from src.plotting.generate_entropy_uncompressed_plot import (
     generate_entropy_uncompressed_plot,
@@ -133,12 +135,14 @@ class ECrRelation:
 
             # get compression ratio calculations and compressed file sizes
             # based on file type and then store in results obj
-            cr_calculations: Dict[str, Dict[str, float]] = calculate_cr_by_file_type(
-                fname,
-                image,
-                dimensions,
-                self.compressed_file_types,
-                self.paths_to_save_compressed_imgs,
+            cr_calculations: Dict[str, Dict[str, float]] = (
+                calculate_results_by_file_type(
+                    fname,
+                    image,
+                    dimensions,
+                    self.compressed_file_types,
+                    self.paths_to_save_compressed_imgs,
+                )
             )
 
             for key in cr_calculations:
