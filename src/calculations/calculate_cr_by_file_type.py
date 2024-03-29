@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple
 
 import numpy as np
 
-from calculate_compression_ratio import calculate_compression_ratio
+from src.calculations.calculate_compression_ratio import calculate_compression_ratio
 
 """
 return compression_ratio and file_size for each compressed_file_type
