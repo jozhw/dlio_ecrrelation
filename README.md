@@ -104,3 +104,24 @@ you will have to run `docker-compose down` to close the container.
 
 If you would like to commit while in your docker repo, you have to set your
 git config for `user.name` and `user.email`.
+
+## How to Use
+
+The basis of running the code comes from the class `ECrRelation`. To initiate a
+`ECrRelation` object, you will need input three arguments.
+
+Firstly, the `.json` path where all of the image paths are stored relative
+to the root dir in the following format:
+
+```
+{ "paths": [
+  "/PATH_TO_IMAGE",
+  ...
+
+```
+
+Secondly, you will need the name of the save directory. The two types currently
+available are `local` and `polaris`.
+
+Lastly, you will need to provide an array of strings of the type of compression.
+The two compression file types currently supported are `npz` and `.jpg`.
