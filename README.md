@@ -72,7 +72,7 @@ which pip
 ```
 
 If the path of the pip is within the venv, then you are set to run `pip install -r requirements.txt`
-This will install of the the dependencies necessary.
+This should install all of the necessary dependencies.
 
 ### Using Docker
 
@@ -124,7 +124,7 @@ Secondly, you will need the name of the save directory. The two types currently
 available are `local` and `polaris`.
 
 Lastly, you will need to provide an array of strings of the type of compression.
-The two compression file types currently supported are `npz` and `.jpg`.
+The two compression file types currently supported are `npz` and `jpg`.
 
 ### Running the Code
 
