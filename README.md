@@ -99,3 +99,8 @@ docker-compose exec python_container bash
 
 To close the docker interactive shell, simply enter `exit`. Then
 you will have to run `docker-compose down` to close the container.
+
+#### Git with Docker
+
+If you would like to commit while in your docker repo, you have to set your
+git config for `user.name` and `user.email`.
