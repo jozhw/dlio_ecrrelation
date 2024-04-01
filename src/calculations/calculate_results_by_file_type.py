@@ -7,7 +7,10 @@ from src.calculations.calculate_compression_ratio import calculate_compression_r
 from src.compressions.compress_files_wrapper import compress_files_wrapper
 
 """
-return compression_ratio and file_size for each compressed_file_type
+Serves as a wrapper for all of the compressions and for calculating the compression
+ratio.
+
+return a dictionary of the compression_ratio and file_size for each compressed_file_type
 """
 
 
