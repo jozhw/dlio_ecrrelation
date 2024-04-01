@@ -54,6 +54,26 @@ conda activate base
 
 ```
 
+##### Troubleshooting
+
+If there was an error creating the conda environment, create the env from scratch instead. The
+following code uses conda.
+
+```
+conda env create --name <NAME_OF_ENV>
+
+```
+
+After the creation make sure that `pip` is installed in the virtual environment and
+the pip that will be used is the one from the virtual environment.
+
+```
+which pip
+```
+
+If the path of the pip is within the venv, then you are set to run `pip install -r requirements.txt`
+This will install of the the dependencies necessary.
+
 ### Using Docker
 
 An alternative to setting up the conda environment on your local machine is to create a docker image and running the docker image on a docker container.
