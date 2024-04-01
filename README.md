@@ -110,12 +110,12 @@ git config for `user.name` and `user.email`.
 The basis of running the code comes from the class `ECrRelation`. To initiate a
 `ECrRelation` object, you will need input three arguments.
 
-Firstly, the `.json` path where all of the image paths are stored relative
-to the root dir in the following format:
+Firstly, the `.json` path where all of the absolute image paths are stored.
+DO NOT INPUT RELATIVE PATH.
 
 ```
 { "paths": [
-  "/PATH_TO_IMAGE",
+  "/ABSOLUTE_PATH_TO_IMAGE",
   ...
 
 ```
@@ -125,3 +125,7 @@ available are `local` and `polaris`.
 
 Lastly, you will need to provide an array of strings of the type of compression.
 The two compression file types currently supported are `npz` and `.jpg`.
+
+### Running the Code
+
+When running make sure to run in the root dir.
