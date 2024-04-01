@@ -10,12 +10,14 @@ import re
 from typing import Dict, List, Tuple
 
 import numpy as np
+from mpi4py import MPI
 from PIL import Image
 
 from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
 from src.calculations.calculate_results_by_file_type import (
     calculate_results_by_file_type,
 )
+from src.ecrr.process_image import process_image
 from src.plotting.generate_ecrr_plot import (
     generate_jpg_ecrr_plot,
     generate_npz_ecrr_plot,
@@ -166,6 +168,47 @@ class ECrRelation:
                     cr_calculations["npz"]["npz_compression_ratio"],
                 )
             )
+
+    def mpi_calculate(self):
+        num_iter = 0
+        comm = MPI.COMM_WORLD
+        rank = comm.Get_rank()
+        size = comm.Get_size()
+
+        # distribute the paths across processes
+        paths_per_process = [[] for _ in range(size)]
+        for i, path in enumerate(self.data["paths"]):
+            paths_per_process[i % size].append(path)
+
+        # each process works on its assigned paths
+        for path in paths_per_process[rank]:
+            result = process_image(
+                path,
+                self.save_dir,
+                self.compressed_file_types,
+                self.paths_to_save_compressed_imgs,
+            )
+            if result is not None:
+                fname, data = result
+                self.results[fname] = data
+                num_iter += 1
+                print(
+                    "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
+                        rank,
+                        num_iter,
+                        fname,
+                        data["entropy"],
+                        data["npz_compression_ratio"],
+                    )
+                )
+
+        # gather results from all processes
+        all_results = comm.gather(self.results, root=0)
+
+        if rank == 0:
+            # merge results from all processes
+            for res in all_results:
+                self.results.update(res)
 
     def save_to_csv(self):
         generate_csv(self.path_to_save_results_data, "results.csv", self.results)
