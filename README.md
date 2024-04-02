@@ -16,6 +16,11 @@ The following code within `.gitattributes` sets the git lfs to track .jpg files.
 
 ```
 
+## System Dependencies
+
+In order to run in parallel you must have open-mpi installed. For macos users install
+by running `brew install open-mpi.
+
 ## Directory Structure
 
 ### results
@@ -129,3 +134,12 @@ The two compression file types currently supported are `npz` and `jpg`.
 ### Running the Code
 
 When running make sure to run in the root dir.
+
+### Running in Parallel
+
+Use the following template to run the code if you would like to run in parallel,
+otherwise run as you would any python script.
+
+```
+mpiexec -n <NUMBER_OF_MPI_PROCESSES> python <PATH_TO_PYTHON_SCRIPT>
+```
