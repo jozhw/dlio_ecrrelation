@@ -10,6 +10,6 @@ def set_img_path(
     if save_dir == "polaris":
         image_path: str = os.path.join(os.path.expanduser("~"), "..", "..", path)
     else:
-        image_path: str = os.path.expanduser("~/{}".format(path))
+        image_path: str = os.path.expanduser("{}".format(path))
 
     return image_path
