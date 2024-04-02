@@ -13,9 +13,7 @@ def generate_npz_ecrr_plot(results_path: str, path_to_save_results_plot: str):
     plt.figure(figsize=(12, 8))
     plt.scatter(entropy, compression_ratio, color="blue", alpha=0.5)
     plt.title(
-        "Entropy vs. Compression Ratio for {} NPZ Compressed Images in ImageNet".format(
-            num_rows
-        )
+        "Entropy vs. Compression Ratio for {} NPZ Compressed Images".format(num_rows)
     )
     plt.xlabel("entropy")
     plt.ylabel("compression_ratio")
@@ -39,9 +37,7 @@ def generate_jpg_ecrr_plot(results_path: str, path_to_save_results_plot: str):
     plt.figure(figsize=(12, 8))
     plt.scatter(entropy, compression_ratio, color="blue", alpha=0.5)
     plt.title(
-        "Entropy vs. Compression Ratio for {} JPG Compressed Images in ImageNet".format(
-            num_rows
-        )
+        "Entropy vs. Compression Ratio for {} JPG Compressed Images".format(num_rows)
     )
     plt.xlabel("entropy")
     plt.ylabel("jpg_compression_ratio")

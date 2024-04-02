@@ -14,11 +14,7 @@ def generate_entropy_uncompressed_plot(
 
     plt.figure(figsize=(12, 8))
     plt.scatter(entropy, uncompressed_size, color="blue", alpha=0.5)
-    plt.title(
-        "Entropy vs. Uncompressed Size for {}  of JPEG Images in ImageNet".format(
-            num_rows
-        )
-    )
+    plt.title("Entropy vs. Uncompressed Size for {}  of JPEG Images".format(num_rows))
     plt.xlabel("entropy")
     plt.ylabel("uncompressed_size")
     plt.grid(True)

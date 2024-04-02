@@ -17,7 +17,7 @@ def generate_entropy_compressed_jpg_npz_plot(
     plt.figure(figsize=(12, 8))
     plt.scatter(entropy, jpg_npz_compressed_size_ratio, color="blue", alpha=0.5)
     plt.title(
-        "Entropy vs. JPG/NPZ Compressed Size Ratio for {} of JPEG Images in ImageNet".format(
+        "Entropy vs. JPG/NPZ Compressed Size Ratio for {} of JPEG Images".format(
             num_rows
         )
     )
