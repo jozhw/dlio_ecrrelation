@@ -14,7 +14,7 @@ def generate_compressed_img_save_paths(
     for accepted_file_type in accepted_file_types:
         if accepted_file_type in compressed_file_types:
             # create path
-            save_path: str = "./assets/{}/{}/{}".format(
+            save_path: str = "./assets/{}/compressed_imgs/{}/{}".format(
                 save_dir, accepted_file_type, date
             )
             # generate path

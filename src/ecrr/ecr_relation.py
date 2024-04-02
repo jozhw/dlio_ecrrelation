@@ -7,16 +7,10 @@ relationship.
 import json
 import os
 import re
-from typing import Dict, List, Tuple
+from typing import Dict, List
 
-import numpy as np
 from mpi4py import MPI
-from PIL import Image
 
-from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
-from src.calculations.calculate_results_by_file_type import (
-    calculate_results_by_file_type,
-)
 from src.ecrr.process_image import process_image
 from src.plotting.generate_ecrr_plot import (
     generate_jpg_ecrr_plot,
@@ -34,7 +28,6 @@ from src.utils.generate_save_paths import (
     generate_save_result_data_path,
     generate_save_result_plot_path,
 )
-from src.utils.set_img_path import set_img_path
 from src.validations.file_type_validations import validate_compressed_file_type
 from src.validations.json_validations import (
     validate_json_extension,
@@ -105,75 +98,10 @@ class ECrRelation:
             self.data: Dict = json.load(f)
 
     def calculate(self):
-        # keep track of iterations
-
-        num_iter: int = 0
-
-        for path in self.data["paths"]:
-
-            image_path: str = set_img_path(path, self.save_dir)
-
-            # load image into numpy array
-            image: np.ndarray = np.array(Image.open(image_path))
-
-            # get dimensions
-            dimensions: Tuple = image.shape[:2]
-
-            # calculate occurances
-            # since we are using rgb, avoid grayscale
-            if len(image.shape) == 2 or image.shape[2] != 3:
-                continue
-
-            occurances: Dict = count_occurrences(image)
-
-            # calculate the entropy
-            entropy: float = calculate_entropy(occurances, dimensions)
-
-            # get file name
-            fname, _ = os.path.splitext(os.path.basename(path))
-
-            # want also to store the uncompressed size and the npz compressed size
-            uncompressed_size: int = dimensions[0] * dimensions[1] * 3
-
-            # store to results dict
-            self.results[fname] = {
-                "entropy": entropy,
-                "uncompressed_size": uncompressed_size,
-            }
-
-            # get compression ratio calculations and compressed file sizes
-            # based on file type and then store in results obj
-            cr_calculations: Dict[str, Dict[str, float]] = (
-                calculate_results_by_file_type(
-                    fname,
-                    image,
-                    dimensions,
-                    self.compressed_file_types,
-                    self.paths_to_save_compressed_imgs,
-                )
-            )
-
-            for key in cr_calculations:
-                for skey, svalue in cr_calculations[key].items():
-                    self.results[fname][skey] = svalue
-
-            # add to iteration completed
-            num_iter += 1
-
-            print(
-                "Completed iteration - {} for {}: entropy={}, compression_ratio={} \n".format(
-                    num_iter,
-                    fname,
-                    entropy,
-                    cr_calculations["npz"]["npz_compression_ratio"],
-                )
-            )
-
-    def mpi_calculate(self):
         num_iter = 0
         comm = MPI.COMM_WORLD
-        rank = comm.Get_rank()
-        size = comm.Get_size()
+        rank: int = comm.Get_rank()
+        size: int = comm.Get_size()
 
         # distribute the paths across processes
         paths_per_process = [[] for _ in range(size)]
@@ -205,7 +133,7 @@ class ECrRelation:
         # gather results from all processes
         all_results = comm.gather(self.results, root=0)
 
-        if rank == 0:
+        if rank == 0 and all_results is not None:
             # merge results from all processes
             for res in all_results:
                 self.results.update(res)
