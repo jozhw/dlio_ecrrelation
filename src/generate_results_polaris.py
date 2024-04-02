@@ -22,7 +22,7 @@ def main():
 
     JSON_FILE: str = "assets/polaris/img_paths/2024-03-26/imagenet_rand_5000.json"
 
-    ecrr = ECrRelation(JSON_FILE, "local", ["npz", "jpg"])
+    ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
     ecrr.load_data()
 
