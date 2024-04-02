@@ -19,7 +19,9 @@ def main():
     size = comm.Get_size()
 
     # path to json file
-    JSON_FILE = "assets/local/img_paths/2024-04-01/local_rand_200.json"
+    JSON_FILE = (
+        "assets/local/img_paths/2024-04-02/all_local_imgs_paths_on_2024-04-02.json"
+    )
 
     ecrr = ECrRelation(JSON_FILE, "local", ["npz", "jpg"])
 
@@ -39,7 +41,7 @@ def main():
         end_time = time.time()
 
         elapsed_time = end_time - start_time
-        print("Elapsed time for parallel: {:.2f} seconds".format(elapsed_time))
+        print("Elapsed time: {:.2f} seconds".format(elapsed_time))
 
         ecrr.remove_compressed_images(REMOVE_FROM_DIR, EXTENSIONS)
 

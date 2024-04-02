@@ -42,7 +42,7 @@ def main():
 
         # Calculate and print elapsed time
         elapsed_time = end_time - start_time
-        print("Elapsed time for parallel: {:.2f} seconds".format(elapsed_time))
+        print("Elapsed time: {:.2f} seconds".format(elapsed_time))
 
         ecrr.remove_compressed_images(REMOVE_FROM_DIR, EXTENSIONS)
 
