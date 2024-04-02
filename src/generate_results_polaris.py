@@ -8,9 +8,12 @@ from mpi4py import MPI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.ecrr.ecr_relation import ECrRelation
 
+REMOVE_FROM_DIR = "./assets/polaris/compressed_imgs"
+EXTENSIONS = [".jpg", ".npz"]
+
 
 def main():
-    # Initialize MPI
+    # init MPI
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
@@ -19,25 +22,20 @@ def main():
 
     JSON_FILE: str = "assets/polaris/img_paths/2024-03-26/imagenet_rand_5000.json"
 
-    # Create an instance of ECrRelation
     ecrr = ECrRelation(JSON_FILE, "local", ["npz", "jpg"])
 
-    # Load data
     ecrr.load_data()
 
-    # Start the timer
     start_time = time.time()
 
-    # Run the calculate function in parallel
     ecrr.calculate()
 
-    # Save results
     ecrr.save_to_csv()
 
-    # Synchronize processes
+    # synchronize processes
     comm.Barrier()
 
-    # Only root process (rank 0) prints the elapsed time
+    # only root process (rank 0) prints the elapsed time
     if rank == 0:
         # End the timer
         end_time = time.time()
@@ -46,7 +44,8 @@ def main():
         elapsed_time = end_time - start_time
         print("Elapsed time for parallel: {:.2f} seconds".format(elapsed_time))
 
-    # Finalize MPI
+        ecrr.remove_compressed_images(REMOVE_FROM_DIR, EXTENSIONS)
+
     MPI.Finalize()
 
 
