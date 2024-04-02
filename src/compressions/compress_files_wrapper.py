@@ -5,7 +5,9 @@ from src.compressions.compress_to_npz import compress_to_npz
 
 
 def compress_files_wrapper(
-    file_type: str, compressed_image_path: str, image: np.ndarray
+    file_type: str,
+    compressed_image_path: str,
+    image: np.ndarray,
 ):
     if file_type == "npz":
         compress_to_npz(compressed_image_path, image)
