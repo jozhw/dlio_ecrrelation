@@ -43,16 +43,17 @@ done
 # switch to where image paths will be stored
 cd "$original_dir"/assets/polaris/img_paths
 
+mkdir "$date" || echo "Directory $date already exits"
 
 # create a JSON file containing the paths
-echo "{ \"paths\": [" > "$json_file"
+echo "{ \"paths\": [" > "$date/$json_file"
 for path in "${paths[@]}"; do
-    echo "  \"$path\"," >> "$json_file"
+    echo "  \"$path\"," >> "$date/$json_file"
 done
 
 # remove the trailing comma from the last entry
-sed -i '$ s/,$//' "$json_file"
-echo "] }" >> "$json_file"
+sed -i '$ s/,$//' "$date/$json_file"
+echo "] }" >> "$date/$json_file"
 
 
 
