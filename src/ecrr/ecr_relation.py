@@ -123,15 +123,15 @@ class ECrRelation:
                 fname, data = result
                 local_results[fname] = data
                 num_iter += 1
-                print(
-                    "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
-                        rank,
-                        num_iter,
-                        fname,
-                        data["entropy"],
-                        data["npz_compression_ratio"],
-                    )
-                )
+                # print(
+                #    "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
+                #        rank,
+                #        num_iter,
+                #        fname,
+                #        data["entropy"],
+                #        data["npz_compression_ratio"],
+                #    )
+                #)
 
         # gather results from all processes
         all_results = comm.gather(local_results, root=0)
