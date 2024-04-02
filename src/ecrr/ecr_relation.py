@@ -108,6 +108,9 @@ class ECrRelation:
         for i, path in enumerate(self.data["paths"]):
             paths_per_process[i % size].append(path)
 
+        # to prevent duplications
+        local_results: Dict = {}
+
         # each process works on its assigned paths
         for path in paths_per_process[rank]:
             result = process_image(
@@ -118,7 +121,7 @@ class ECrRelation:
             )
             if result is not None:
                 fname, data = result
-                self.results[fname] = data
+                local_results[fname] = data
                 num_iter += 1
                 print(
                     "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
@@ -131,7 +134,7 @@ class ECrRelation:
                 )
 
         # gather results from all processes
-        all_results = comm.gather(self.results, root=0)
+        all_results = comm.gather(local_results, root=0)
 
         if rank == 0 and all_results is not None:
             # merge results from all processes
