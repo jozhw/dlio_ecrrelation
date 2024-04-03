@@ -13,7 +13,7 @@ EXTENSIONS = [".jpg", ".npz"]
 def main():
     # path to json file
 
-    JSON_FILE: str = "assets/polaris/img_paths/2024-04-01/imagenet_rand_10000.json"
+    JSON_FILE: str = "assets/polaris/img_paths/2024-04-03/imagenet_rand_100000.json"
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
@@ -32,8 +32,6 @@ def main():
     # Calculate and print elapsed time
     elapsed_time = end_time - start_time
     print("Elapsed time: {:.2f} seconds".format(elapsed_time))
-
-    ecrr.remove_compressed_images(REMOVE_FROM_DIR, EXTENSIONS)
 
 
 if __name__ == "__main__":
