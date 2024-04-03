@@ -131,7 +131,7 @@ class ECrRelation:
                 #        data["entropy"],
                 #        data["npz_compression_ratio"],
                 #    )
-                #)
+                # )
 
         # gather results from all processes
         all_results = comm.gather(local_results, root=0)
@@ -167,11 +167,3 @@ class ECrRelation:
             os.path.join(self.path_to_save_results_data, "results.csv"),
             self.path_to_save_results_plot,
         )
-
-    def remove_compressed_images(self, directory: str, extensions: List[str]):
-        for root, _, files in os.walk(directory):
-            if files:
-                for file in files:
-                    file_path: str = os.path.join(root, file)
-                    if any(file.endswith(ext) for ext in extensions):
-                        os.remove(file_path)

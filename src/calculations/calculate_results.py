@@ -5,6 +5,7 @@ import numpy as np
 
 from src.calculations.calculate_compression_ratio import calculate_compression_ratio
 from src.compressions.compress_files_wrapper import compress_files_wrapper
+from utils.remove_compressed_imgs import remove_compressed_imgs
 
 """
 Serves as a wrapper for all of the compressions and for calculating the compression
@@ -14,7 +15,7 @@ return a dictionary of the compression_ratio and file_size for each compressed_f
 """
 
 
-def calculate_results_by_file_type(
+def calculate_results(
     fname: str,
     image: np.ndarray,
     dimensions: Tuple,
@@ -46,5 +47,8 @@ def calculate_results_by_file_type(
             key_cr: compression_ratio,
             key_size: compressed_file_size,
         }
+
+        # delete compressed image here
+        remove_compressed_imgs(compressed_image_path)
 
     return cr_calculations

@@ -8,9 +8,6 @@ from mpi4py import MPI
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.ecrr.ecr_relation import ECrRelation
 
-REMOVE_FROM_DIR = "./assets/polaris/compressed_imgs"
-EXTENSIONS = [".jpg", ".npz"]
-
 
 def main():
     # init MPI
@@ -20,7 +17,9 @@ def main():
 
     # path to json file
 
-    JSON_FILE: str = "assets/polaris/img_paths/2024-04-02/all_imagenet_paths_on_2024-04-02.json"
+    JSON_FILE: str = (
+        "assets/polaris/img_paths/2024-04-02/all_imagenet_paths_on_2024-04-02.json"
+    )
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
@@ -43,8 +42,6 @@ def main():
         # Calculate and print elapsed time
         elapsed_time = end_time - start_time
         print("Elapsed time: {:.2f} seconds".format(elapsed_time))
-
-        ecrr.remove_compressed_images(REMOVE_FROM_DIR, EXTENSIONS)
 
     MPI.Finalize()
 
