@@ -8,6 +8,6 @@ module load conda ; conda activate base
 
 cd dlio_ecrrelation
 
-mpiexec -n 128 --ppn 64 --rank-by core python src/generate_results_polaris.py
+mpiexec -n 128 --ppn 64 python src/generate_results_polaris.py
 
 ```
