@@ -2,7 +2,7 @@
 
 
 # define a constant for number of image paths to get
-NUM_IMG_PATHS=5000
+NUM_IMG_PATHS=1000000
 
 # store current working dir
 original_dir="$PWD"
