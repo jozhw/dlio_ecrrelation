@@ -44,7 +44,9 @@ def generate_csv(
 
             # Write each chunk to a separate CSV file
             for i, chunk in enumerate(chunks):
-                csv_file = os.path.join(save_path, f"{fname}_{i}.csv")
+                # may need to adjust this in the future so that there is more than
+                # one results.csv file since the fname that i gave is results.csv
+                csv_file = os.path.join(save_path, fname)
                 with open(csv_file, "w", newline="") as file:
                     writer = csv.DictWriter(file, fieldnames=field_names)
                     writer.writeheader()
