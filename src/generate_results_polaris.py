@@ -18,7 +18,7 @@ def main():
     # path to json file
 
     JSON_FILE: str = (
-        "assets/polaris/img_paths/2024-04-02/all_imagenet_paths_on_2024-04-02.json"
+        "assets/polaris/img_paths/2024-04-01/imagenet_rand_10000.json"
     )
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
