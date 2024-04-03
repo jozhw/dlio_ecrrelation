@@ -1,47 +1,58 @@
 #!/bin/bash
 
-# Define a constant for the number of image paths to get
+
+# define a constant for number of image paths to get
 NUM_IMG_PATHS=100000
 
-# Store the original working directory
+# store current working dir
 original_dir="$PWD"
 
-# ImageNet path
+# imagenet path
 IMAGENET_PATH="eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train"
 
-# Change to the ImageNet directory
-cd "$HOME/../.." || { echo "Could not find $IMAGENET_PATH"; exit 1; }
+# change to the imagenet dir on polaris
+cd $HOME
 
-# Print current path
+cd ..
+cd ..
+
+cd eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train || echo "Could not find $IMAGENET_PATH"
+
 current_path=$(pwd)
 echo "Current Path: $current_path"
 
-# Find image paths given NUM_IMG_PATHS
-jpg_files=$(find . -type f -name '*.JPEG' | shuf -n "$NUM_IMG_PATHS")
 
-# Use GNU Parallel to process image paths in parallel
-parallel -j64 realpath {} ::: $jpg_files | \
-    shuf | \
-    head -n "$NUM_IMG_PATHS" | \
-    parallel -j64 'echo {} >> "$original_dir/assets/polaris/img_paths/$date/$json_file"'
+# find image paths given NUM_IMG_PATHS 
+jpg_files=$(find .  -type f -name '*.JPEG' | shuf -n "$NUM_IMG_PATHS")
 
-# Name of the JSON file for storage
+# create an array to store the paths
+paths=()
+
+# name of json file for storage
 json_file="imagenet_rand_$NUM_IMG_PATHS.json"
 
-# Switch to where image paths will be stored
-cd "$original_dir/assets/polaris/img_paths" || { echo "Could not switch directory"; exit 1; }
+# get image path and store to paths array
+for file in $jpg_files; do
+    # Get the absolute path of the file
+    absolute_path=$(realpath "$file")
+    # Add the absolute path to the array
+    paths+=("$absolute_path")
+done
 
-# Make dated directory
+# switch to where image paths will be stored
+cd "$original_dir"/assets/polaris/img_paths
+
+# make dated directory
 date=$(date +'%Y-%m-%d')
 
-mkdir -p "$date" || echo "Directory $date already exists"
+mkdir "$date" || echo "Directory $date already exits"
 
-# Create a JSON file containing the paths
+# create a JSON file containing the paths
 echo "{ \"paths\": [" > "$date/$json_file"
+for path in "${paths[@]}"; do
+    echo "  \"$path\"," >> "$date/$json_file"
+done
 
-# Concatenate all the partial JSON files into the final JSON file
-cat $date/* >> "$date/$json_file"
-
-# Remove the trailing comma from the last entry
+# remove the trailing comma from the last entry
 sed -i '$ s/,$//' "$date/$json_file"
 echo "] }" >> "$date/$json_file"
