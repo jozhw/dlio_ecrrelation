@@ -1,58 +1,54 @@
 #!/bin/bash
 
+# Start timer
+start_time=$(date +%s.%N)
 
 # define a constant for number of image paths to get
 NUM_IMG_PATHS=100000
 
-# store current working dir
-original_dir="$PWD"
-
 # imagenet path
 IMAGENET_PATH="eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train"
 
-# change to the imagenet dir on polaris
-cd $HOME
+# Change directory directly instead of using multiple 'cd' commands
+IMAGENET_DIR="$HOME/../../$IMAGENET_PATH"
 
-cd ..
-cd ..
+# Check if the directory exists
+if [ ! -d "$IMAGENET_DIR" ]; then
+    echo "Could not find $IMAGENET_PATH"
+    exit 1
+fi
 
-cd eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train || echo "Could not find $IMAGENET_PATH"
+# Find image paths given NUM_IMG_PATHS 
+jpg_files=$(find "$IMAGENET_DIR" -type f -name '*.JPEG' | shuf -n "$NUM_IMG_PATHS")
 
-current_path=$(pwd)
-echo "Current Path: $current_path"
-
-
-# find image paths given NUM_IMG_PATHS 
-jpg_files=$(find .  -type f -name '*.JPEG' | shuf -n "$NUM_IMG_PATHS")
-
-# create an array to store the paths
-paths=()
-
-# name of json file for storage
+# Generate JSON file name
 json_file="imagenet_rand_$NUM_IMG_PATHS.json"
 
-# get image path and store to paths array
+# Create directory if it doesn't exist
+output_dir="assets/polaris/img_paths/$(date +'%Y-%m-%d')"
+mkdir -p "$output_dir"
+
+# Store paths in a temporary file
+tmp_file=$(mktemp)
 for file in $jpg_files; do
-    # Get the absolute path of the file
-    absolute_path=$(realpath "$file")
-    # Add the absolute path to the array
-    paths+=("$absolute_path")
-done
+    realpath "$file"
+done > "$tmp_file"
 
-# switch to where image paths will be stored
-cd "$original_dir"/assets/polaris/img_paths
+# Create JSON file containing the paths
+{
+    echo -n "{ \"paths\": ["
+    sed '$ s/,$//' "$tmp_file"
+    echo "] }"
+} > "$output_dir/$json_file"
 
-# make dated directory
-date=$(date +'%Y-%m-%d')
+# Remove the temporary file
+rm "$tmp_file"
 
-mkdir "$date" || echo "Directory $date already exits"
+# End timer
+end_time=$(date +%s.%N)
 
-# create a JSON file containing the paths
-echo "{ \"paths\": [" > "$date/$json_file"
-for path in "${paths[@]}"; do
-    echo "  \"$path\"," >> "$date/$json_file"
-done
+# Calculate elapsed time
+execution_time=$(echo "$end_time - $start_time" | bc)
 
-# remove the trailing comma from the last entry
-sed -i '$ s/,$//' "$date/$json_file"
-echo "] }" >> "$date/$json_file"
+# Print execution time
+echo "Execution time: $execution_time seconds for $NUM_IMG_PATHS image paths."
