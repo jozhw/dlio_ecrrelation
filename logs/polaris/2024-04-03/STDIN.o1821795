@@ -1,0 +1,14 @@
+Chunk 1 saved to ./results/polaris/data/2024-04-03/results.csv
+Elapsed time: 472.24 seconds
+
+------------- Query Details -------------
+Commands:
+
+	qsub -A DLIO -l select=2 -q debug -l walltime=0:35:00 -l filesystems=home:eagle
+
+	module load conda ; conda activate base
+
+	cd dlio_ecrrelation
+
+	mpiexec -n 128 --ppn 64 python src/generate_results_polaris.py
+
