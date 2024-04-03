@@ -1,6 +1,6 @@
 import csv
 import os
-from typing import List, Mapping, Optional
+from typing import Mapping
 
 from mpi4py import MPI
 
@@ -9,16 +9,19 @@ def generate_csv(
     save_path: str, fname: str, results: Mapping[str, Mapping[str, float]]
 ):
     """
-    Write results to a CSV file.
+    Write results to CSV files in chunks.
 
     Args:
-        save_path: Path to the directory where the CSV file will be saved.
-        fname: Name of the CSV file.
+        save_path: Path to the directory where the CSV files will be saved.
+        fname: Base name of the CSV files.
         results: Mapping of file names to result dictionaries.
     """
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
+
+    # Define chunk size
+    CHUNK_SIZE = 100000
 
     # Each process contributes its local results to the root process
     gathered_results = comm.gather(results, root=0)
@@ -33,21 +36,23 @@ def generate_csv(
             field_names = list(merged_results[next(iter(merged_results))].keys())
             field_names.insert(0, "file_name")
 
-            # Collect all rows from all processes
-            all_rows = []
-            for file_name, values in merged_results.items():
-                row_data = {"file_name": file_name}
-                row_data.update({key: str(value) for key, value in values.items()})
-                all_rows.append(row_data)
+            # Split merged results into chunks
+            chunks = [
+                list(merged_results.items())[i : i + CHUNK_SIZE]
+                for i in range(0, len(merged_results), CHUNK_SIZE)
+            ]
 
-            csv_file = os.path.join(save_path, fname)
+            # Write each chunk to a separate CSV file
+            for i, chunk in enumerate(chunks):
+                csv_file = os.path.join(save_path, f"{fname}_{i}.csv")
+                with open(csv_file, "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=field_names)
+                    writer.writeheader()
+                    for file_name, values in chunk:
+                        row_data = {"file_name": file_name}
+                        row_data.update(
+                            {key: str(value) for key, value in values.items()}
+                        )
+                        writer.writerow(row_data)
 
-            with open(csv_file, "w", newline="") as file:
-                writer = csv.DictWriter(
-                    file,
-                    fieldnames=field_names,
-                )
-                writer.writeheader()
-                writer.writerows(all_rows)  # Write all rows in bulk
-
-            print("Data saved to", csv_file)
+                print(f"Chunk {i+1} saved to {csv_file}")
