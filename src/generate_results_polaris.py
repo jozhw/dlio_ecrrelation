@@ -23,8 +23,6 @@ def main():
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
-    ecrr.load_data()
-
     start_time = time.time()
 
     ecrr.calculate()
