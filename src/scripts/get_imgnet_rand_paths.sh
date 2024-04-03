@@ -34,12 +34,8 @@ for file in $jpg_files; do
     realpath "$file"
 done > "$tmp_file"
 
-# Create JSON file containing the paths
-{
-    echo -n "{ \"paths\": ["
-    sed '$ s/,$//' "$tmp_file"
-    echo "] }"
-} > "$output_dir/$json_file"
+# create json file containing all of the paths
+jq -Rs '{paths: split("\n") | map(select(. != ""))}' "$tmp_file" > "$output_dir/$json_file"
 
 # Remove the temporary file
 rm "$tmp_file"
