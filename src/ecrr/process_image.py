@@ -10,9 +10,7 @@ import numpy as np
 from PIL import Image
 
 from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
-from src.calculations.calculate_results_by_file_type import (
-    calculate_results_by_file_type,
-)
+from src.calculations.calculate_results import calculate_results
 from src.utils.set_img_path import set_img_path
 
 
@@ -45,7 +43,7 @@ def process_image(
         "uncompressed_size": uncompressed_size,
     }
 
-    cr_calculations: Dict[str, Dict[str, float]] = calculate_results_by_file_type(
+    cr_calculations: Dict[str, Dict[str, float]] = calculate_results(
         fname,
         image,
         dimensions,

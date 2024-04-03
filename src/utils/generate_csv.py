@@ -1,75 +1,60 @@
 import csv
 import os
-from typing import List, Mapping, Optional
+from typing import Mapping
 
 from mpi4py import MPI
-
-
-def gather_results(
-    comm: MPI.Comm, results: Mapping[str, Mapping[str, float]]
-) -> List[Optional[Mapping[str, Mapping[str, float]]]]:
-    """
-    Gather results from all processes onto the root process.
-
-    Args:
-        comm: MPI communicator.
-        results: Local results from each process.
-
-    Returns:
-        List of results gathered on the root process.
-    """
-    rank = comm.Get_rank()
-    if rank == 0:
-        gathered_results: List[Optional[Mapping[str, Mapping[str, float]]]] = [results]
-        for i in range(1, comm.Get_size()):
-            gathered_results.append(comm.recv(source=i))
-        return gathered_results
-    else:
-        comm.send(results, dest=0)
-        return []
 
 
 def generate_csv(
     save_path: str, fname: str, results: Mapping[str, Mapping[str, float]]
 ):
     """
-    Write results to a CSV file.
+    Write results to CSV files in chunks.
 
     Args:
-        save_path: Path to the directory where the CSV file will be saved.
-        fname: Name of the CSV file.
+        save_path: Path to the directory where the CSV files will be saved.
+        fname: Base name of the CSV files.
         results: Mapping of file names to result dictionaries.
     """
     comm = MPI.COMM_WORLD
     rank = comm.Get_rank()
     size = comm.Get_size()
 
-    gathered_results = gather_results(comm, results)
+    # Define chunk size
+    CHUNK_SIZE = 100000
+
+    # Each process contributes its local results to the root process
+    gathered_results = comm.gather(results, root=0)
 
     if rank == 0:
-        field_names = list(results[next(iter(results))].keys())
-        field_names.insert(0, "file_name")
+        # Merge all gathered results into a single dictionary
+        merged_results = {}
+        if gathered_results is not None:
+            for result in gathered_results:
+                merged_results.update(result)
 
-        csv_file = os.path.join(save_path, fname)
+            field_names = list(merged_results[next(iter(merged_results))].keys())
+            field_names.insert(0, "file_name")
 
-        with open(csv_file, "w", newline="") as file:
-            writer = csv.DictWriter(
-                file,
-                fieldnames=field_names,
-            )
+            # Split merged results into chunks
+            chunks = [
+                list(merged_results.items())[i : i + CHUNK_SIZE]
+                for i in range(0, len(merged_results), CHUNK_SIZE)
+            ]
 
-            writer.writeheader()
-
-            for gathered_result in gathered_results:
-                if gathered_result is not None:  # Check for None
-                    for file_name, values in gathered_result.items():
+            # Write each chunk to a separate CSV file
+            for i, chunk in enumerate(chunks):
+                # may need to adjust this in the future so that there is more than
+                # one results.csv file since the fname that i gave is results.csv
+                csv_file = os.path.join(save_path, fname)
+                with open(csv_file, "w", newline="") as file:
+                    writer = csv.DictWriter(file, fieldnames=field_names)
+                    writer.writeheader()
+                    for file_name, values in chunk:
                         row_data = {"file_name": file_name}
                         row_data.update(
                             {key: str(value) for key, value in values.items()}
                         )
                         writer.writerow(row_data)
 
-        if gathered_results and any(
-            gathered_results
-        ):  # Check if any non-None value exists
-            print("Data saved to", csv_file)
+                print(f"Chunk {i+1} saved to {csv_file}")

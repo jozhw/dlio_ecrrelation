@@ -97,15 +97,25 @@ class ECrRelation:
         with open(self.json_img_path) as f:
             self.data: Dict = json.load(f)
 
-    def calculate(self):
+    def process_images(self):
         num_iter = 0
         comm = MPI.COMM_WORLD
         rank: int = comm.Get_rank()
         size: int = comm.Get_size()
 
+        # only the 0th rank can load the data
+        if rank == 0:
+            self.load_data()
+            paths = self.data["paths"]
+        else:
+            paths = None
+
+        # broadcast paths to all nodes
+        paths = comm.bcast(paths, root=0)
+
         # distribute the paths across processes
         paths_per_process = [[] for _ in range(size)]
-        for i, path in enumerate(self.data["paths"]):
+        for i, path in enumerate(paths):
             paths_per_process[i % size].append(path)
 
         # to prevent duplications
@@ -123,15 +133,15 @@ class ECrRelation:
                 fname, data = result
                 local_results[fname] = data
                 num_iter += 1
-                print(
-                    "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
-                        rank,
-                        num_iter,
-                        fname,
-                        data["entropy"],
-                        data["npz_compression_ratio"],
-                    )
-                )
+                # print(
+                #    "Process {}, Completed iteration - {} for {}: entropy={}, compression_ratio={}".format(
+                #        rank,
+                #        num_iter,
+                #        fname,
+                #        data["entropy"],
+                #        data["npz_compression_ratio"],
+                #    )
+                # )
 
         # gather results from all processes
         all_results = comm.gather(local_results, root=0)
@@ -167,11 +177,3 @@ class ECrRelation:
             os.path.join(self.path_to_save_results_data, "results.csv"),
             self.path_to_save_results_plot,
         )
-
-    def remove_compressed_images(self, directory: str, extensions: List[str]):
-        for root, _, files in os.walk(directory):
-            if files:
-                for file in files:
-                    file_path: str = os.path.join(root, file)
-                    if any(file.endswith(ext) for ext in extensions):
-                        os.remove(file_path)
