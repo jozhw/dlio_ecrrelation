@@ -17,15 +17,13 @@ def main():
 
     # path to json file
 
-    JSON_FILE: str = (
-        "assets/polaris/img_paths/2024-04-01/imagenet_rand_10000.json"
-    )
+    JSON_FILE: str = "assets/polaris/img_paths/2024-04-01/imagenet_rand_10000.json"
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
     start_time = time.time()
 
-    ecrr.calculate()
+    ecrr.process_images()
 
     ecrr.save_to_csv()
 

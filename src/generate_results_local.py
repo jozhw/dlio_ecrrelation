@@ -24,7 +24,7 @@ def main():
 
     start_time = time.time()
 
-    ecrr.calculate()
+    ecrr.process_images()
 
     ecrr.save_to_csv()
 

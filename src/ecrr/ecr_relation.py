@@ -12,19 +12,27 @@ from typing import Dict, List
 from mpi4py import MPI
 
 from src.ecrr.process_image import process_image
-from src.plotting.generate_ecrr_plot import (generate_jpg_ecrr_plot,
-                                             generate_npz_ecrr_plot)
-from src.plotting.generate_entropy_compressed_jpg_npz_plot import \
-    generate_entropy_compressed_jpg_npz_plot
-from src.plotting.generate_entropy_uncompressed_plot import \
-    generate_entropy_uncompressed_plot
+from src.plotting.generate_ecrr_plot import (
+    generate_jpg_ecrr_plot,
+    generate_npz_ecrr_plot,
+)
+from src.plotting.generate_entropy_compressed_jpg_npz_plot import (
+    generate_entropy_compressed_jpg_npz_plot,
+)
+from src.plotting.generate_entropy_uncompressed_plot import (
+    generate_entropy_uncompressed_plot,
+)
 from src.utils.generate_csv import generate_csv
-from src.utils.generate_save_paths import (generate_compressed_img_save_paths,
-                                           generate_save_result_data_path,
-                                           generate_save_result_plot_path)
+from src.utils.generate_save_paths import (
+    generate_compressed_img_save_paths,
+    generate_save_result_data_path,
+    generate_save_result_plot_path,
+)
 from src.validations.file_type_validations import validate_compressed_file_type
-from src.validations.json_validations import (validate_json_extension,
-                                              validate_json_img_path)
+from src.validations.json_validations import (
+    validate_json_extension,
+    validate_json_img_path,
+)
 
 
 class ECrRelation:
@@ -89,7 +97,7 @@ class ECrRelation:
         with open(self.json_img_path) as f:
             self.data: Dict = json.load(f)
 
-    def calculate(self):
+    def process_images(self):
         num_iter = 0
         comm = MPI.COMM_WORLD
         rank: int = comm.Get_rank()
