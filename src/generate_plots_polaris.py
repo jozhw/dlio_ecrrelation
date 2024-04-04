@@ -13,7 +13,7 @@ EXTENSIONS = [".jpg", ".npz"]
 def main():
     # path to json file
 
-    JSON_FILE: str = "assets/polaris/img_paths/2024-04-03/imagenet_rand_100000.json"
+    JSON_FILE: str = "assets/polaris/img_paths/2024-04-04/imagenet_rand_300000.json"
 
     ecrr = ECrRelation(JSON_FILE, "polaris", ["npz", "jpg"])
 
