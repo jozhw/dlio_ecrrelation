@@ -23,6 +23,7 @@ from src.plotting.generate_entropy_uncompressed_plot import (
     generate_entropy_uncompressed_plot,
 )
 from src.utils.generate_csv import generate_csv
+from src.utils.generate_results_name import generate_results_name
 from src.utils.generate_save_paths import (
     generate_compressed_img_save_paths,
     generate_save_result_data_path,
@@ -55,6 +56,7 @@ class ECrRelation:
         self.json_img_path: str = json_img_path
         self.save_dir: str = save_dir
         self.compressed_file_types: List[str] = compressed_file_types
+        self.results_name: str = generate_results_name(self.json_img_path)
         # init save the results
         self.results: Dict = {}
 
@@ -152,28 +154,28 @@ class ECrRelation:
                 self.results.update(res)
 
     def save_to_csv(self):
-        generate_csv(self.path_to_save_results_data, "results.csv", self.results)
+        generate_csv(self.path_to_save_results_data, self.results_name, self.results)
 
     def gen_npz_ecrr_plot(self):
         generate_npz_ecrr_plot(
-            os.path.join(self.path_to_save_results_data, "results.csv"),
+            os.path.join(self.path_to_save_results_data, self.results_name),
             self.path_to_save_results_plot,
         )
 
     def gen_jpg_ecrr_plot(self):
         generate_jpg_ecrr_plot(
-            os.path.join(self.path_to_save_results_data, "results.csv"),
+            os.path.join(self.path_to_save_results_data, self.results_name),
             self.path_to_save_results_plot,
         )
 
     def gen_entropy_uncompressed_plot(self):
         generate_entropy_uncompressed_plot(
-            os.path.join(self.path_to_save_results_data, "results.csv"),
+            os.path.join(self.path_to_save_results_data, self.results_name),
             self.path_to_save_results_plot,
         )
 
     def gen_entropy_compressed_jpg_npz_plot(self):
         generate_entropy_compressed_jpg_npz_plot(
-            os.path.join(self.path_to_save_results_data, "results.csv"),
+            os.path.join(self.path_to_save_results_data, self.results_name),
             self.path_to_save_results_plot,
         )
