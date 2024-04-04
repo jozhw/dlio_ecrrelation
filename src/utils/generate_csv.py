@@ -42,19 +42,17 @@ def generate_csv(
                 for i in range(0, len(merged_results), CHUNK_SIZE)
             ]
 
-            # Write each chunk to a separate CSV file
+            # Write each chunk to the CSV file
+            csv_file = os.path.join(save_path, fname)
             for i, chunk in enumerate(chunks):
-                # may need to adjust this in the future so that there is more than
-                # one results.csv file since the fname that i gave is results.csv
-                csv_file = os.path.join(save_path, fname)
-                with open(csv_file, "w", newline="") as file:
+                with open(csv_file, "a", newline="") as file:
                     writer = csv.DictWriter(file, fieldnames=field_names)
-                    writer.writeheader()
+                    if i == 0:
+                        writer.writeheader()  # Write header only once
                     for file_name, values in chunk:
                         row_data = {"file_name": file_name}
                         row_data.update(
                             {key: str(value) for key, value in values.items()}
                         )
                         writer.writerow(row_data)
-
-                print(f"Chunk {i+1} saved to {csv_file}")
+                print(f"Chunk {i+1} appended to {csv_file}")
