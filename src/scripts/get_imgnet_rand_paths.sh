@@ -4,7 +4,7 @@
 start_time=$(date +%s.%N)
 
 # define a constant for number of image paths to get
-NUM_IMG_PATHS=100000
+NUM_IMG_PATHS=300000
 
 # imagenet path
 IMAGENET_PATH="eagle/datasets/ImageNet/ILSVRC/Data/CLS-LOC/train"
