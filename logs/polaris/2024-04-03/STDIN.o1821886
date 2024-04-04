@@ -1,0 +1,15 @@
+Chunk 1 appended to ./results/polaris/data/2024-04-04/results_imagenet_rand_300000.csv
+Chunk 2 appended to ./results/polaris/data/2024-04-04/results_imagenet_rand_300000.csv
+Chunk 3 appended to ./results/polaris/data/2024-04-04/results_imagenet_rand_300000.csv
+Elapsed time: 1393.78 seconds
+
+------------- Query Details -------------
+Commands:
+
+	qsub -A DLIO -l select=2 -q debug -l walltime=0:40:00 -l filesystems=home:eagle
+
+	module load conda ; conda activate base
+
+	cd dlio_ecrrelation
+
+	mpiexec -n 128 --ppn 64 python src/generate_results_polaris.py
