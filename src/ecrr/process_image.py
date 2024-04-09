@@ -41,6 +41,8 @@ def process_image(
     result: Dict[str, float] = {
         "entropy": entropy,
         "uncompressed_size": uncompressed_size,
+        "uncompressed_width": dimensions[0],
+        "uncompressed_height": dimensions[1]
     }
 
     cr_calculations: Dict[str, Dict[str, float]] = calculate_results(
