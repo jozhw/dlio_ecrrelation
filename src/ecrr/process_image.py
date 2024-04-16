@@ -10,6 +10,7 @@ import numpy as np
 from PIL import Image
 
 from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
+from src.calculations.calculate_mean import calculate_mean
 from src.calculations.calculate_results import calculate_results
 from src.utils.set_img_path import set_img_path
 
@@ -33,6 +34,7 @@ def process_image(
         return None
 
     occurances: Dict = count_occurrences(image)
+    mean: float = calculate_mean(occurances)
     entropy: float = calculate_entropy(occurances, dimensions)
 
     fname, _ = os.path.splitext(os.path.basename(path))
@@ -42,7 +44,8 @@ def process_image(
         "entropy": entropy,
         "uncompressed_size": uncompressed_size,
         "uncompressed_width": dimensions[0],
-        "uncompressed_height": dimensions[1]
+        "uncompressed_height": dimensions[1],
+        "mean_intensity_value": mean,
     }
 
     cr_calculations: Dict[str, Dict[str, float]] = calculate_results(
