@@ -1,7 +1,11 @@
 from typing import Dict
 
+"""
+Returns rounded mean intensity value to the nearest integer
+"""
 
-def calculate_mean(occurances: Dict):
+
+def calculate_mean(occurances: Dict) -> int:
 
     total_sum = 0
     total_count = 0
@@ -14,4 +18,4 @@ def calculate_mean(occurances: Dict):
         if total_count == 0:
             return 0
 
-    return total_sum / total_count
+    return round(total_sum / total_count)
