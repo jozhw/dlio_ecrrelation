@@ -9,7 +9,11 @@ from typing import Dict, List, Optional, Tuple
 import numpy as np
 from PIL import Image
 
-from src.calculations.calculate_entropy import calculate_entropy, count_occurrences
+from src.calculations.calculate_entropy import (
+    calculate_entropy,
+    count_each_rgb_occurrences,
+    count_occurrences,
+)
 from src.calculations.calculate_mean import calculate_mean
 from src.calculations.calculate_results import calculate_results
 from src.utils.set_img_path import set_img_path
@@ -34,8 +38,19 @@ def process_image(
         return None
 
     occurances: Dict = count_occurrences(image)
-    mean: float = calculate_mean(occurances)
-    entropy: float = calculate_entropy(occurances, dimensions)
+    mean: int = calculate_mean(occurances)
+    entropy: float = calculate_entropy(occurances)
+
+    r_occurances, g_occurances, b_occurances = count_each_rgb_occurrences(image)
+
+    r_mean: int = calculate_mean(r_occurances)
+    r_entropy: float = calculate_entropy(r_occurances)
+
+    g_mean: int = calculate_mean(g_occurances)
+    g_entropy: float = calculate_entropy(g_occurances)
+
+    b_mean: int = calculate_mean(b_occurances)
+    b_entropy: float = calculate_entropy(b_occurances)
 
     fname, _ = os.path.splitext(os.path.basename(path))
     uncompressed_size: int = dimensions[0] * dimensions[1] * 3
@@ -46,6 +61,12 @@ def process_image(
         "uncompressed_width": dimensions[0],
         "uncompressed_height": dimensions[1],
         "mean_intensity_value": mean,
+        "red_mean_intensity_value": r_mean,
+        "green_mean_intensity_value": g_mean,
+        "blue_mean_intensity_value": b_mean,
+        "red_entropy_intensity_value": r_entropy,
+        "green_entropy_intensity_value": g_entropy,
+        "blue_entropy_intensity_value": b_entropy,
     }
 
     cr_calculations: Dict[str, Dict[str, float]] = calculate_results(
