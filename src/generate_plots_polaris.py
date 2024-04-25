@@ -22,9 +22,9 @@ def main():
     start_time = time.time()
 
     ecrr.gen_npz_ecrr_plot()
-    ecrr.gen_jpg_ecrr_plot()
-    ecrr.gen_entropy_uncompressed_plot()
-    ecrr.gen_entropy_compressed_jpg_npz_plot()
+    # ecrr.gen_jpg_ecrr_plot()
+    # ecrr.gen_entropy_uncompressed_plot()
+    # ecrr.gen_entropy_compressed_jpg_npz_plot()
 
     # End the timer
     end_time = time.time()
